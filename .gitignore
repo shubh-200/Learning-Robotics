@@ -1,0 +1,51 @@
+# Obsidian workspace/cache files
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/graph.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+install/
+log/
+devel/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Large files (don't push trained models)
+*.pth
+*.onnx
+*.trt
+*.pt
+*.h5
+*.weights
+
+# Datasets (too large for git)
+datasets/
+data/
+
+# Docker
+*.tar
+
+# ROS bags (can be large)
+*.bag
+*.db3
+*.mcap

@@ -1,0 +1,28 @@
+{
+  "open": true,
+  "sidebar": {
+    "tabs": true
+  },
+  "daily-notes": {
+    "folder": "Daily-Log",
+    "template": "Templates/Daily Note",
+    "format": "YYYY-MM-DD",
+    "autorun": false
+  },
+  "templates": {
+    "folder": "Templates",
+    "dateFormat": "YYYY-MM-DD",
+    "timeFormat": "HH:mm"
+  },
+  "graph": {},
+  "backlink": {},
+  "outgoing-link": {},
+  "tag-pane": {},
+  "page-preview": {},
+  "file-explorer": {},
+  "global-search": {},
+  "command-palette": {},
+  "markdown-importer": {},
+  "outline": {},
+  "word-count": {}
+}

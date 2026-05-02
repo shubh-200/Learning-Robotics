@@ -1,0 +1,10 @@
+{
+  "newFileLocation": "folder",
+  "newFileFolderPath": "Notes",
+  "attachmentFolderPath": "Resources/attachments",
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "relative",
+  "showLineNumber": true,
+  "strictLineBreaks": false,
+  "readableLineLength": true
+}
