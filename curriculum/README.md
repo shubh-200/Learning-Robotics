@@ -138,5 +138,4 @@ Based on analysis of 100+ job postings at companies like NVIDIA, Boston Dynamics
 
 ---
 
-*Curriculum version 1.0 — Generated May 2026*
-*Tailored for: Robotics Software Engineer roles (manipulation, mobile robots, perception)*
+

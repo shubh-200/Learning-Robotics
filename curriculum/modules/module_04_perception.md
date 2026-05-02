@@ -1,6 +1,6 @@
 # Module 4 — 3D Perception & Sensor Fusion
 
-> **Duration:** 3–4 weeks | **Prerequisites:** Module 1, your existing CV/DL background
+> **Prerequisites:** Module 1, your existing CV/DL background
 > **Why this matters:** Robots need to *see* and *understand* the 3D world. Your CV/DL experience gives you a head start — this module upgrades it to 3D robotics perception, the #1 most-posted skill requirement.
 
 ---

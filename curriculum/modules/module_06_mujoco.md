@@ -1,6 +1,6 @@
 # Module 6 — Simulators: MuJoCo & Physics Engines
 
-> **Duration:** 2–3 weeks | **Prerequisites:** Modules 2, 3
+> **Prerequisites:** Modules 2, 3
 > **Why this matters:** MuJoCo is the gold standard for high-fidelity physics simulation in RL research. It's used by DeepMind, OpenAI, and virtually every robotics RL lab. Understanding contact dynamics and fast physics simulation is critical for sim-to-real work.
 
 ---

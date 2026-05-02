@@ -1,6 +1,6 @@
 # Module 5 — Simulators: NVIDIA Isaac Sim
 
-> **Duration:** 3–4 weeks | **Prerequisites:** Modules 1, 2, 3, 4
+> **Prerequisites:** Modules 1, 2, 3, 4
 > **Why this matters:** Isaac Sim is NVIDIA's flagship robotics simulator built on Omniverse. It's the industry leader for photorealistic simulation, synthetic data generation, and digital twins. Proficiency here signals you're ready for cutting-edge robotics roles.
 
 ---

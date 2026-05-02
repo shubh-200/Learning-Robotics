@@ -1,6 +1,6 @@
 # Module 1 — Intermediate & Advanced ROS2
 
-> **Duration:** 3–4 weeks | **Prerequisites:** Module 0, Basic ROS2
+> **Prerequisites:** Module 0, Basic ROS2
 > **Why this matters:** ROS2 is the *lingua franca* of robotics. Advanced fluency separates hobbyists from engineers.
 
 ---

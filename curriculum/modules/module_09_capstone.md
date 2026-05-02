@@ -1,6 +1,6 @@
 # Module 9 — Capstone Project: Autonomous Intelligent Manipulation System
 
-> **Duration:** 4–6 weeks | **Prerequisites:** All modules (0–8)
+> **Prerequisites:** All modules (0–8)
 > **Purpose:** This is your portfolio centerpiece — the project that demonstrates end-to-end robotics engineering competency. It integrates every skill from the curriculum into a single, polished system.
 
 ---

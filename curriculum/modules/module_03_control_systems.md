@@ -1,6 +1,6 @@
 # Module 3 — Control Systems for Robotics
 
-> **Duration:** 2–3 weeks | **Prerequisites:** Module 1
+> **Prerequisites:** Module 1
 > **Why this matters:** Control is what makes robots move *correctly*. A motion plan is useless if the robot can't track it. MPC and state estimation appear in nearly every senior-level robotics job posting.
 
 ---

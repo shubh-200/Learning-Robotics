@@ -1,6 +1,6 @@
 # Module 7 — Reinforcement Learning for Robotics
 
-> **Duration:** 3–4 weeks | **Prerequisites:** Modules 5, 6, your existing DL background
+> **Prerequisites:** Modules 5, 6, your existing DL background
 > **Why this matters:** RL is the bridge between "hard-coded robot" and "learning robot." Sim-to-real transfer is the hottest skill in robotics hiring right now. Your DL background is a massive advantage here.
 
 ---

@@ -1,6 +1,6 @@
 # Module 2 — Motion Planning & Manipulation
 
-> **Duration:** 3–4 weeks | **Prerequisites:** Module 1
+> **Prerequisites:** Module 1
 > **Why this matters:** Manipulation is the #1 growth area in robotics. Every warehouse, factory, and home robot needs to plan and execute motions safely. MoveIt2 proficiency is a direct resume differentiator.
 
 ---

@@ -1,6 +1,6 @@
 # Module 8 — Production Robotics & Systems Engineering
 
-> **Duration:** 2–3 weeks | **Prerequisites:** All previous modules
+> **Prerequisites:** All previous modules
 > **Why this matters:** Building demos is different from shipping robots. This module covers the "last mile" skills that make you production-ready AND prepares you for interviews. These are the skills that separate a junior from a mid-level robotics engineer.
 
 ---

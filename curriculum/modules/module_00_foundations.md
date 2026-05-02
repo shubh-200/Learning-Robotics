@@ -1,6 +1,5 @@
 # Module 0 — Foundations & Tooling
 
-> **Duration:** 1–2 weeks
 > **Prerequisites:** Basic programming knowledge
 > **Why this matters:** Every robotics job posting requires strong Linux, C++, and build-system fluency. This module ensures you're not fighting tools while learning robotics.
 
