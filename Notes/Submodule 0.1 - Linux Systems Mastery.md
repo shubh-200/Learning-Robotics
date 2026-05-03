@@ -4,7 +4,7 @@
 > **Status:** 🟡 In Progress 
 > **Started:** 2026-05-02
 > **Completed:** Exercise 1
-> **Total Hours Spent:** 4
+> **Total Hours Spent:** 7
 
 ---
 
@@ -83,6 +83,13 @@ done
 
 echo "----------------------------------------" | tee -a "$LOG_FILE"
 ```
+- **`timeout $CHECK_DURATION`**: The command `ros2 topic hz` runs infinitely until you press `Ctrl+C`. You cannot automate an infinite command in a standard loop. `timeout` is a Linux utility that sends a termination signal (SIGTERM) to the process after the specified seconds, allowing the script to move on.
+
+- **`2>/dev/null`**: This redirects standard error (file descriptor 2) to the Linux "black hole" (`/dev/null`). If a topic exists but nothing is publishing to it, ROS2 will throw a continuous warning. We swallow that warning so our logs stay clean.
+
+- **`grep` and `awk`**: This is classic Linux text manipulation. The output of `ros2 topic hz` is a block of text. `grep "average rate:"` filters out everything except the lines containing the rate. Then, `awk '{print $3}'` splits the final line by spaces and grabs exactly the 3rd column i.e. the raw number itself.
+
+- **`tee -a`**: This takes the output of our `echo` commands and splits it in two directions: it prints to your terminal so you can watch it live, and it appends (`-a`) it to `topic_health.log` simultaneously.
 
 ### **Exercise 2:**
 **Step 1:** Recognize the connected device using the command _lsusb_
@@ -163,12 +170,155 @@ lrwxrwxrwx 1 root root 7 May  3 16:58 /dev/robot_serial -> ttyUSB0
 
 ### **Exercise 3:** 
 
+Since we need to launch a script/launch file on boot using systemd, first create a ROS2 workspace.
+```bash
+mkdir -p ~/ros2_ws/src
+```
 
+Use `colcon build` to build the initial empty workspace creating the `build, install, log` directories.
+
+Create a ROS2 package. I am creating a python package here.
+I am going with a simple package which will contain the launch file to bring up the turtle sim.
+```bash
+ros2 pkg create --build-type ament_python turtle_bringup
+```
+Replace `ament_python` with `ament_cmake` for a cpp package.
+
+Now I write the launch file in `~/turtle_bringup/launch`
+```bash
+nano launch/turtlesim_launch.py
+```
+
+```python
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='turtlesim',
+            executable='turtlesim_node',
+            name='sim_window'
+        )
+    ])
+```
+
+Register the launch file in the setup.py file.
+```python
+from setuptools import find_packages, setup
+import os                     # Add this
+from glob import glob         # Add this
+
+package_name = 'turtle_bringup'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        # --- Add the following line ---
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='username',
+    maintainer_email='username@todo.todo',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+        ],
+    },
+)
+```
+
+Build the workspace and test the launch file.
+```bash
+cd ~/ros2_ws
+colcon build --packages-select turtle_bringup
+source install setup.bash
+ros2 launch turtle_bringup turtlesim_launch.py
+```
+
+Now time to auto launch this whenever we boot up WSL.
+**Step 1:** Wrapper Script
+`systemd` environments are extremely minimal. They do not automatically load the `.bashrc`, which means they have no idea what "ROS2" is. We have to create a script that explicitly sources your environments before launching your code.
+1. Create the script in the home directory `/home/username` as `nano ~/start_robot.sh`
+2. Add the following in the script:
+```bash
+#!/bin/bash
+
+# Source the core ROS2 installation
+source /opt/ros/jazzy/setup.bash
+
+# Source your local workspace
+source /home/username/ros2_ws/install/setup.bash
+
+# Launch your main bringup file
+ros2 launch turtle_bringup turtlesim_launch.py
+```
+3. Make the script executable
+```bash
+chmod +x start_robot.sh
+```
+
+**Step 2:** `systemd` service file
+1. Create the service file in the system directory:
+```bash
+sudo nano /etc/systemd/system/robot-stack.service
+```
+2. Add the following config in it:
+```bash
+[Unit]
+Description=ROS2 Turtle Sim
+After=network.target
+
+[Service]
+Type=simple
+User=username
+# The following 2 lines are needed for systemd to launch gui properly (See Day 2 log)
+Environment="DISPLAY=:0"
+Environment="WAYLAND_DISPLAY=wayland-0"
+ExecStart=/home/username/start_robot.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+- **`After=network.target`**: This ensures your robot doesn't try to start ROS2 before the Wi-Fi or DDS networking interfaces are ready.
+- **`User=username`**: This is critical. If you don't specify this, `systemd` runs everything as `root`. You want your ROS2 nodes running under your normal user account so they have access to your workspace files.
+- **`Restart=on-failure` & `RestartSec=5`**: This makes your robot robust. If your C++ node throws a segmentation fault and crashes, Linux will wait 5 seconds and automatically spin the entire stack back up.
+
+**Step 3:** Enable and Start the service
+1. Reload the daemon to read the new file
+```bash
+sudo systemctl daemon-reload
+```
+2. Enable the service so it starts automatically on every boot
+```bash
+sudo systemctl enable robot-stack.service
+```
+3. Start it right now without having to reboot
+```bash
+sudo systemctl start robot-stack.service
+```
+
+Additional debugging step:
+Because this runs in the background, we won't see the `ros2` output in our terminal. To view the live logs of our robot stack, we use the `journalctl` command:
+```bash
+journalctl -u robot-stack.service -f
+```
+(The `-u` targets the specific unit, and `-f` follows the log live, just like `tail -f`).
 
 #### Exercises Completed
 - [x] Exercise 1
 - [x] Exercise 2
-- [ ] Exercise 3
+- [x] Exercise 3
 
 ---
 
