@@ -32,8 +32,9 @@ https://learnxinyminutes.com/bash/
 https://devhints.io/bash
 #### My Implementation Notes
 
-**Exercise 1:**
-```
+### **Exercise 1:**
+
+```bash
 #!/bin/bash
 
 # --- Configuration ---
@@ -83,10 +84,91 @@ done
 echo "----------------------------------------" | tee -a "$LOG_FILE"
 ```
 
+### **Exercise 2:**
+**Step 1:** Recognize the connected device using the command _lsusb_
+Since I am using WSL2, the device is not directly recognized just by connecting it and running the command.
+First I needed to forward the USB traffic from Windows directly into the WSL kernel. To do this, a tool called _usbipd-win_ (uses USB/IP protocol) is used.
+
+Run powershell as administrator and install the tool:
+```powershell
+winget install --interactive --exact dorssel.usbipd-win
+```
+
+Install the linux client tool:
+```shell
+sudo apt update
+sudo apt install linux-tools-virtual hwdata
+```
+
+Bind and attach the device:
+1. Plug in your device (I used an ESP32)
+2. Open powershell as administrator
+3. List all connected USB devices
+```powershell
+usbipd list
+```
+4. Look through the output for your device. Look at the BUSID column and note it.
+5. Bind the device to make it available for sharing. (1-1 is the entry from the BUSID column)
+```powershell
+usbipd bind --busid 1-1
+```
+6. Attach the device to WSL
+```powershell
+usbipd attach --wsl --busid 2-1
+```
+
+Switch back to WSL and type in the command _lsusb_.
+You'll see an output as follows:
+```bash
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+```
+
+My ESP32 is recognized as Device 003. The crucial part is the ID 10c4:ea60 where, 
+- Vendor ID: 10c4
+- Product ID: ea60
+
+**Step 2:** Write the _udev_ rule.
+Rules are stored in `/etc/udev/rules.d/`. They are parsed in numerical order, so we usually prefix custom rules with `99-` so they run last and override default system rules.
+1. Open a new file with root privileges:
+```bash
+sudo nano /etc/udev/rules.d/99-robot-serial.rules
+```
+2. Add the following line:
+```bash
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="robot_serial", MODE="0666"
+```
+- `==` is a matching condition. We are telling the system: _If_ the subsystem is a TTY (serial) device, _and_ the Vendor ID matches, _and_ the Product ID matches...
+
+- `+=` and `=` are actions. ..._Then_ create a symlink named `robot_serial` and set the permissions mode to `0666` (read and write access for all users).
+
+Adding `MODE="0666"` is a vital robotics hack. It prevents the dreaded "Permission Denied" error when your ROS2 node tries to open the serial port, saving you from having to run your nodes as `sudo` or messing with user groups.
+
+**Step 3:** Reload and Trigger the rules
+Linux needs to be told that you added a new rule. You can either unplug the device and plug it back in, or run these commands to apply it without touching the hardware:
+```bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+**Step 4:** Verify
+```bash
+ls -l /dev/robot_serial
+```
+The output was as follows:
+```bash
+lrwxrwxrwx 1 root root 7 May  3 16:58 /dev/robot_serial -> ttyUSB0
+```
+
+### **Exercise 3:** 
+
+
 
 #### Exercises Completed
 - [x] Exercise 1
-- [ ] Exercise 2
+- [x] Exercise 2
+- [ ] Exercise 3
 
 ---
 
