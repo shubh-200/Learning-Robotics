@@ -1,7 +1,7 @@
 # 📘 Notes
 
 > **Module:** [[../curriculum/modules/module_00_foundations|module_00_foundations]]
-> **Status:** 🟡 In Progress 
+> **Status:** 🟢 Completed 
 > **Started:** 2026-05-02
 > **Completed:** Exercise 1
 > **Total Hours Spent:** 7
@@ -18,7 +18,7 @@
 ## 📝 Notes by Submodule
 
 ### Submodule 0.1 — Linux Systems Mastery
-**Status:** ⬜ In Progress
+**Status:** ⬜ Completed
 
 #### Key Concepts
 _File System Hierarchy_ 
